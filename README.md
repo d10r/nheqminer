@@ -1,3 +1,16 @@
+# Changes in this fork:
+
+Possibility to connect to arbitrary pools. 
+In the main repo, the host was hardcoded to `equihash.<location>.nicehash.com`, with only the location configurable.
+
+In order to keep changes minimal, I have somewhat hacked the code.
+The `-l` parameter changed behaviour. It now takes a full *host* name instead of only a *location*.
+Additionally there's now a parameter `-q` for *port* (`-p` was already taken for *password*).
+
+Example usage for suprnova pool:
+
+./nheqminer -l zec.suprnova.cc -q 2142 -u someuser.someworker -p somepass
+
 # Build instructions:
 
 ## Windows:

@@ -33,13 +33,14 @@ void print_help()
 {
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\t-h\t\tPrint this help and quit" << std::endl;
-	std::cout << "\t-l [location]\tLocation (eu, usa, hk, jp)" << std::endl;
+	std::cout << "\t-l [location]\tLocation (Host)" << std::endl;
+	std::cout << "\t-q [port]\tPort" << std::endl;
 	std::cout << "\t-u [username]\tUsername (bitcoinaddress)" << std::endl;
 	std::cout << "\t-p [password]\tPassword (default: x)" << std::endl;
 	std::cout << "\t-t [num_thrds]\tNumber of threads (default: number of sys cores)" << std::endl;
 	std::cout << "\t-d [level]\tDebug print level (0 = print all, 5 = fatal only, default: 2)" << std::endl;
 	std::cout << "\t-b [hashes]\tRun in benchmark mode (default: 100 hashes)" << std::endl;
-	std::cout << "\t-a [port]\tLocal API port (default: 0 = do not bind)" << std::endl;
+	std::cout << "\t-a [apiport]\tLocal API port (default: 0 = do not bind)" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -79,7 +80,8 @@ int main(int argc, char* argv[])
 	std::cout << "Special thanks to tromp for providing optimized CPU equihash solver" << std::endl;
 	std::cout << std::endl;
 
-	std::string location = "eu";
+	std::string location = "equihash.eu.nicehash.com";
+	std::string port = "3333";
 	std::string user = "1DXnVXrTmcEd77Z6E4zGxkn7fGeHXSGDt1";
 	std::string password = "x";
 	int num_threads = -1;
@@ -93,9 +95,12 @@ int main(int argc, char* argv[])
 		if (argv[i][0] != '-') continue;
 
 		switch (argv[i][1])
-		{
+		{	
 		case 'l':
 			location = argv[++i];
+			break;
+		case 'q':
+			port = argv[++i];
 			break;
 		case 'u':
 			user = argv[++i];
@@ -146,8 +151,8 @@ int main(int argc, char* argv[])
 
 	if (!benchmark)
 	{
-		std::string host = "equihash." + location + ".nicehash.com";
-		std::string port = "3357";
+
+		std::string host = location;
 
 		std::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
 
