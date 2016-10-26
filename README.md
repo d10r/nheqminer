@@ -9,7 +9,7 @@ Additionally there's now a parameter `-q` for *port* (`-p` was already taken for
 
 Example usage for suprnova pool:
 
-./nheqminer -l zec.suprnova.cc -q 2142 -u someuser.someworker -p somepass
+`./nheqminer -l zec.suprnova.cc -q 2142 -u someuser.someworker -p somepass`
 
 # Build instructions:
 
