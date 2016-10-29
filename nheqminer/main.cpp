@@ -33,13 +33,12 @@ void print_help()
 {
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\t-h\t\tPrint this help and quit" << std::endl;
-	std::cout << "\t-l [location]\tLocation (Host)" << std::endl;
-	std::cout << "\t-q [port]\tPort" << std::endl;
-	std::cout << "\t-u [username]\tUsername (bitcoinaddress)" << std::endl;
-	std::cout << "\t-p [password]\tPassword (default: x)" << std::endl;
+	std::cout << "\t-l [location]\thost[:port]. host defaults to equihash.eu.nicehash.com, port to to 3333" << std::endl;
+	std::cout << "\t-u [username]\tUsername (for nicehash it can also be bitcoin address)" << std::endl;
+	std::cout << "\t-p [password]\tPassword" << std::endl;
 	std::cout << "\t-t [num_thrds]\tNumber of threads (default: number of sys cores)" << std::endl;
 	std::cout << "\t-d [level]\tDebug print level (0 = print all, 5 = fatal only, default: 2)" << std::endl;
-	std::cout << "\t-b [hashes]\tRun in benchmark mode (default: 100 hashes)" << std::endl;
+	std::cout << "\t-b [hashes]\tRun in benchmark mode (default: 100 hashes). NOT ACCURATE IN THIS VERSION (shows less then real)" << std::endl;
 	std::cout << "\t-a [apiport]\tLocal API port (default: 0 = do not bind)" << std::endl;
 	std::cout << std::endl;
 }
@@ -82,8 +81,8 @@ int main(int argc, char* argv[])
 
 	std::string location = "equihash.eu.nicehash.com";
 	std::string port = "3333";
-	std::string user = "1DXnVXrTmcEd77Z6E4zGxkn7fGeHXSGDt1";
-	std::string password = "x";
+	std::string user = "";
+	std::string password = "";
 	int num_threads = -1;
 	bool benchmark = false;
 	int log_level = 2;
@@ -100,6 +99,7 @@ int main(int argc, char* argv[])
 			location = argv[++i];
 			break;
 		case 'q':
+			// for backwards compatibility only
 			port = argv[++i];
 			break;
 		case 'u':
@@ -151,8 +151,13 @@ int main(int argc, char* argv[])
 
 	if (!benchmark)
 	{
-
 		std::string host = location;
+		size_t delim = location.find(':');
+		if(delim != string::npos) {
+			// in case the port is also configured via param -q, it's overridden by the one specified with -l
+			host = location.substr(0, delim);
+			port = location.substr(delim+1);
+		}
 
 		std::shared_ptr<boost::asio::io_service> io_service(new boost::asio::io_service);
 
